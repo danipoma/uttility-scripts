@@ -1,1 +1,1 @@
-# uttility-scripts
+# utility-scripts
