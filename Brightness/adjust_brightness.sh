@@ -1,6 +1,4 @@
 #!/usr/bin/env bash
-# Bash script to control the monitor brightness
-# Put into /usr/bin/ and add chmod +x
 
 function getPercentage() {
 	local -r BASE_NUMBER=$1
