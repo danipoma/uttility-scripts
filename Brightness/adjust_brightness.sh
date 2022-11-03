@@ -1,8 +1,18 @@
 #!/usr/bin/env bash
+# set error settings
+set -eo pipefail
 
 function getPercentage() {
 	local -r BASE_NUMBER="${1}"
 	local -r PERCENTAGE="${2}"
+
+	if [[ -z "${BASE_NUMBER}" ]]; then
+		return 1
+	fi
+
+	if [[ -z "${PERCENTAGE}" ]]; then
+		return 1
+	fi
 
 	local -r LEVEL_ONE_PERCENT_WHOLE_PART="$((BASE_NUMBER / 100))"
 	local -r LEVEL_ONE_PERCENT_DECIMAL_PART="$((BASE_NUMBER % 100))"

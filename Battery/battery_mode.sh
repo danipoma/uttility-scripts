@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+# set error settings
+set -eo pipefail
 
 ## Color table
 RED="\033[0;31m"
