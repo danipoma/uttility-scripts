@@ -1,0 +1,9 @@
+[Unit]
+Description=Script that temporarily fixes unresponsive
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/env bash adjust_brightness.sh 100
+
+[Install]
+WantedBy=multi-user.target
