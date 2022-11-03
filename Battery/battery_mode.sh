@@ -8,21 +8,21 @@ BLUE="\033[0;34m"
 CYAN="\033[0;36m"
 CLEAR="\033[0m"
 
-## Manual
-SYNTAX=$"Specify '${YELLOW}battery mode${CLEAR}'\\n- ${CYAN}1${CLEAR} for conservation mode ${GREEN}activation${CLEAR} (${CYAN}60%${CLEAR})\\n- ${CYAN}0${CLEAR} for conservation mode ${RED}deactivation${CLEAR} (${CYAN}100%${CLEAR})"
-
-BATTERY_DIRECTORY_NAME="/sys/devices/pci0000:00/0000:00:14.3/PNP0C09:00/VPC2004:00"
-CONSERVATION_MODE_FILE_NAME="conservation_mode"
-
-CONSERVATION_MODE_FILE_PATH="${BATTERY_DIRECTORY_NAME}/${CONSERVATION_MODE_FILE_NAME}"
-
-MODE=$1
-
 # Check if is run as a root
 if [ "${EUID}" != 0 ]; then
 	echo -e "${RED}[error]:${CLEAR} This needs to be run as a root"
 	exit 1
 fi
+
+## Manual
+SYNTAX=$"Specify '${YELLOW}battery mode${CLEAR}'\\n- ${CYAN}1${CLEAR} for conservation mode ${GREEN}activation${CLEAR} (${CYAN}60%${CLEAR})\\n- ${CYAN}0${CLEAR} for conservation mode ${RED}deactivation${CLEAR} (${CYAN}100%${CLEAR})"
+
+BATTERY_DIRECTORY_PATH="/sys/bus/platform/drivers/ideapad_acpi/VPC2004:00"
+CONSERVATION_MODE_FILE_NAME="conservation_mode"
+
+CONSERVATION_MODE_FILE_PATH="${BATTERY_DIRECTORY_PATH}/${CONSERVATION_MODE_FILE_NAME}"
+
+MODE="${1}"
 
 if [[ -z "${MODE}" || "${MODE}" -gt 1 || "${MODE}" -lt 0 ]]; then
 	echo -e "${SYNTAX}"

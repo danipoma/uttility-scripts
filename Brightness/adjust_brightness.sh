@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
 function getPercentage() {
-	local -r BASE_NUMBER=$1
-	local -r PERCENTAGE=$2
+	local -r BASE_NUMBER="${1}"
+	local -r PERCENTAGE="${2}"
 
 	local -r LEVEL_ONE_PERCENT_WHOLE_PART="$((BASE_NUMBER / 100))"
 	local -r LEVEL_ONE_PERCENT_DECIMAL_PART="$((BASE_NUMBER % 100))"
@@ -13,14 +13,22 @@ function getPercentage() {
 }
 
 function changeBacklight() {
-	local -r BACKLIGHT_DIRECTORY_NAME="/sys/class/backlight"
+	local -r BACKLIGHT_DIRECTORY_PATH="${1}"
+	local -r BACKLIGHT_MODULE_NAME="${2}"
+
+	if [[ -z "${BACKLIGHT_DIRECTORY_PATH}" ]]; then
+		return 1
+	fi
+
+	if [[ -z "${BACKLIGHT_MODULE_NAME}" ]]; then
+		return 1
+	fi
+
 	local -r MAX_BRIGHTNESS_FILE_NAME="max_brightness"
 	local -r BRIGHTNESS_FILE_NAME="brightness"
 
-	local -r BACKLIGHT_MODULE_NAME=$1
-
-	local -r MAX_BRIGHTNESS_FILE_PATH="${BACKLIGHT_DIRECTORY_NAME}/${BACKLIGHT_MODULE_NAME}/${MAX_BRIGHTNESS_FILE_NAME}"
-	local -r BRIGHTNESS_FILE_PATH="${BACKLIGHT_DIRECTORY_NAME}/${BACKLIGHT_MODULE_NAME}/${BRIGHTNESS_FILE_NAME}"
+	local -r MAX_BRIGHTNESS_FILE_PATH="${BACKLIGHT_DIRECTORY_PATH}/${BACKLIGHT_MODULE_NAME}/${MAX_BRIGHTNESS_FILE_NAME}"
+	local -r BRIGHTNESS_FILE_PATH="${BACKLIGHT_DIRECTORY_PATH}/${BACKLIGHT_MODULE_NAME}/${BRIGHTNESS_FILE_NAME}"
 
 	if [[ -f "${MAX_BRIGHTNESS_FILE_PATH}" && -f "${BRIGHTNESS_FILE_PATH}" ]]; then
 		brightness_changed=true
@@ -33,12 +41,38 @@ function changeBacklight() {
 	fi
 }
 
-function runBacklightUpdateBatch() {
-	local -r IGPU_BACKLIGHT_MODULE_NAME="amdgpu_bl0"
-	local -r DGPU_BACKLIGHT_MODULE_NAME="nvidia_0"
+function getSubdirectories() {
+	# assign argument to constant while removing trailing slash
+	local directory_path="${1}"
 
-	changeBacklight "${IGPU_BACKLIGHT_MODULE_NAME}"
-	changeBacklight "${DGPU_BACKLIGHT_MODULE_NAME}"
+	if [[ -z ${directory_path} ]]; then
+		return 1
+	fi
+
+	# remove trailing slash
+	directory_path="${directory_path%/}"
+
+	declare -a arrDirs
+	for item in "${directory_path}"/*/; do
+		# remove trailing slash
+		item="${item%/}"
+
+		# remove path prefix
+		item="${item##*/}"
+
+		# append item to array
+		arrDirs+=("${item}")
+	done
+
+	echo "${arrDirs[@]}"
+}
+
+function adjustBrightness() {
+	local -r BACKLIGHT_DIRECTORY_PATH="/sys/class/backlight"
+
+	for MODULE_NAME in $(getSubdirectories "${BACKLIGHT_DIRECTORY_PATH}"); do
+		changeBacklight "${BACKLIGHT_DIRECTORY_PATH}" "${MODULE_NAME}"
+	done
 }
 
 # Color table
@@ -49,16 +83,16 @@ BLUE="\033[0;34m"
 CYAN="\033[0;36m"
 CLEAR="\033[0m"
 
-# Manual
-SYNTAX=$"Specify brightness '${YELLOW}level${CLEAR}' - range from ${CYAN}0${CLEAR} to ${CYAN}100${CLEAR}"
-
 # Check if is run as a root
 if [ "${EUID}" != 0 ]; then
 	echo -e "${RED}[error]:${CLEAR} This needs to be run as a root"
 	exit 1
 fi
 
-LEVEL=$1
+# Manual
+SYNTAX=$"Specify brightness '${YELLOW}level${CLEAR}' - range from ${CYAN}0${CLEAR} to ${CYAN}100${CLEAR}"
+
+LEVEL="${1}"
 
 # State tracking
 brightness_changed=false
@@ -68,7 +102,7 @@ if [[ -z "${LEVEL}" || "${LEVEL}" -gt 100 || "${LEVEL}" -lt 0 ]]; then
 	exit 1
 fi
 
-runBacklightUpdateBatch
+adjustBrightness
 
 if [ "${brightness_changed}" = true ]; then
 	echo -e "${GREEN}[info]:${CLEAR} Screen brightness level set to ${CYAN}${LEVEL}%${CLEAR}"
