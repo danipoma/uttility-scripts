@@ -1,4 +1,4 @@
-1. chmod 0644 adjust_brightness.service
-2. copy adjust_brightness.service to /etc/systemd/system/
-3. sudo systemctl enable adjust_brightness.service
-4. sudo systemctl start adjust_brightness.service
+chmod 0644 adjust_brightness.service
+sudo mv adjust_brightness.service /etc/systemd/system/
+sudo systemctl enable adjust_brightness.service
+sudo systemctl start adjust_brightness.service
