@@ -1,9 +1,10 @@
 [Unit]
 Description=Script workaround for brightness adjustment
+After=suspend.target hibernate.target hybrid-sleep.target suspend-then-hibernate.target
 
 [Service]
-Type=oneshot
+Type=simple
 ExecStart=/usr/bin/env bash adjust_brightness.sh 100
 
 [Install]
-WantedBy=multi-user.target
+WantedBy=multi-user.target suspend.target hibernate.target hybrid-sleep.target suspend-then-hibernate.target
