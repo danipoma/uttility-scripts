@@ -120,6 +120,24 @@ fi
 . "$HOME/.asdf/asdf.sh"
 . "$HOME/.asdf/completions/asdf.bash"
 
-if [ -d "$(asdf where golang)/packages/bin" ]; then
-    PATH="$(asdf where golang)/packages/bin:$PATH"
+# Check if we have golang installed
+if type go &>/dev/null; then
+    # Set variables GOPATH and GOBIN
+    # They need to be exported to be used properly by go env -w command
+    export GOPATH="$HOME/.golang/packages"
+    export GOBIN="$GOPATH/bin"
+
+    # Write GOPATH and GOBIN to go env
+    go env -w GOPATH="$GOPATH"
+    go env -w GOBIN="$GOBIN"
+
+    # Append GOPATH and GOBIN also to PATH variable package discovery in shell
+    PATH="$GOPATH:$PATH"
+    PATH="$GOBIN:$PATH"
+
+    # Unset the GOPATH and GOBIN variables
+    # Those variables are no longer needed and we do not want them to be
+    # accessible in shell
+    unset GOPATH
+    unset GOBIN
 fi
