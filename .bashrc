@@ -122,6 +122,12 @@ fi
 
 # Check if we have golang installed
 if type go &>/dev/null; then
+
+    # Create .golang folder if it doesn't exist yet
+    if [ ! -d "$HOME/.golang" ]; then
+        mkdir "$HOME/.golang"
+    fi
+
     # Set variables GOPATH and GOBIN
     # They need to be exported to be used properly by go env -w command
     export GOPATH="$HOME/.golang/packages"
