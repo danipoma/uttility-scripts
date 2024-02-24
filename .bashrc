@@ -126,6 +126,11 @@ if type go &>/dev/null; then
     # Create .golang folder if it doesn't exist yet
     if [ ! -d "$HOME/.golang" ]; then
         mkdir "$HOME/.golang"
+
+        # Create bin folder within if it doesn't exist
+        if [ ! -d "$HOME/.golang/bin" ]; then
+            mkdir "$HOME/.golang/bin"
+        fi
     fi
 
     # Set variables GOPATH and GOBIN
