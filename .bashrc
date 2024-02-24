@@ -128,11 +128,6 @@ if type go &>/dev/null; then
         mkdir "$HOME/.golang"
     fi
 
-    # Create bin folder within .golang folder if it doesn't exist
-    if [ ! -d "$HOME/.golang/bin" ]; then
-        mkdir "$HOME/.golang/bin"
-    fi
-
     # Set variables GOPATH and GOBIN
     # They need to be exported to be used properly by go env -w command
     export GOPATH="$HOME/.golang/packages"
