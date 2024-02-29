@@ -128,21 +128,16 @@ if type go &>/dev/null; then
         mkdir "$HOME/.golang"
     fi
 
-    # Set variables GOPATH and GOBIN
-    # They need to be exported to be used properly by go env -w command
-    export GOPATH="$HOME/.golang/packages"
-    export GOBIN="$GOPATH/bin"
+    # Set GOBIN variable
+    GOBIN="$HOME/.golang/packages/bin"
 
-    # Write GOPATH and GOBIN to go env
-    go env -w GOPATH="$GOPATH"
+    # Write GOBIN to go env
     go env -w GOBIN="$GOBIN"
 
     # Append GOBIN to PATH variable package discovery in shell
     PATH="$GOBIN:$PATH"
 
-    # Unset the GOPATH and GOBIN variables
-    # Those variables are no longer needed and we do not want them to be
-    # accessible in shell
-    unset GOPATH
+    # Unset GOBIN variable since it no longer needed
+    # and we do not want it to be accessible in shell
     unset GOBIN
 fi
