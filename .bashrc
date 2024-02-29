@@ -137,8 +137,7 @@ if type go &>/dev/null; then
     go env -w GOPATH="$GOPATH"
     go env -w GOBIN="$GOBIN"
 
-    # Append GOPATH and GOBIN also to PATH variable package discovery in shell
-    PATH="$GOPATH:$PATH"
+    # Append GOBIN to PATH variable package discovery in shell
     PATH="$GOBIN:$PATH"
 
     # Unset the GOPATH and GOBIN variables
