@@ -129,15 +129,8 @@ if type go &>/dev/null; then
     fi
 
     # Set GOBIN variable
-    GOBIN="$HOME/.golang/packages/bin"
-
-    # Write GOBIN to go env
-    go env -w GOBIN="$GOBIN"
+    export GOBIN="$HOME/.golang/bin"
 
     # Append GOBIN to PATH variable package discovery in shell
     PATH="$GOBIN:$PATH"
-
-    # Unset GOBIN variable since it no longer needed
-    # and we do not want it to be accessible in shell
-    unset GOBIN
 fi
