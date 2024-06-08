@@ -51,5 +51,5 @@ CapsLock::Lwin
     else if WinExist("ahk_exe Everything.exe")
         WinActivate
     else
-        Run "Everything.exe"
+        Run "C:\\Program Files\\Everything\\Everything.exe"
 }
