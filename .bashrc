@@ -119,3 +119,18 @@ fi
 
 . "$HOME/.asdf/asdf.sh"
 . "$HOME/.asdf/completions/asdf.bash"
+
+# Check if we have golang installed
+if type go &>/dev/null; then
+
+    # Create .golang folder if it doesn't exist yet
+    if [ ! -d "$HOME/.golang" ]; then
+        mkdir "$HOME/.golang"
+    fi
+
+    # Set GOBIN variable
+    export GOBIN="$HOME/.golang/bin"
+
+    # Append GOBIN to PATH variable package discovery in shell
+    PATH="$GOBIN:$PATH"
+fi
