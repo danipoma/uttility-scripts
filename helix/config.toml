@@ -6,6 +6,9 @@ mouse = false
 rulers = [80]
 bufferline = "multiple"
 
+[editor.lsp]
+display-inlay-hints = true
+
 [editor.indent-guides]
 render = true
 character = "╎" # Some characters that work well: "▏", "┆", "┊", "⸽"
@@ -27,3 +30,9 @@ separator = "│"
 mode.normal = "NORMAL"
 mode.insert = "INSERT"
 mode.select = "SELECT"
+
+[editor.soft-wrap]
+enable = true
+max-wrap = 25 # increase value to reduce forced mid-word wrapping
+max-indent-retain = 0
+wrap-indicator = ""  # set wrap-indicator to "" to hide it
